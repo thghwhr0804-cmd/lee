@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>건설안전 교육 센터</title>
+    <style>
+        /* 기본 스타일 리셋 및 폰트 */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif, '맑은 고딕';
+        }
+
+        body {
+            background-color: #f4f7fa;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        /* 네비게이션 바 */
+        header {
+            background-color: #0f2c59;
+            color: #ffffff;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+            letter-spacing: 1px;
+        }
+
+        .logo span {
+            color: #38b6ff;
+        }
+
+        nav a {
+            color: #ffffff;
+            text-decoration: none;
+            margin-left: 20px;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        nav a:hover {
+            color: #38b6ff;
+        }
+
+        /* 메인 컨텐츠 영역 */
+        main {
+            max-width: 1200px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        section {
+            background: #ffffff;
+            border-radius: 12px;
+            padding: 40px;
+            margin-bottom: 40px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+        }
+
+        h2 {
+            color: #0f2c59;
+            font-size: 28px;
+            margin-bottom: 25px;
+            border-bottom: 3px solid #38b6ff;
+            padding-bottom: 10px;
+            display: inline-block;
+        }
+
+        /* 강사 소개 스타일 */
+        .profile-container {
+            display: flex;
+            align-items: center;
+            gap: 40px;
+            flex-wrap: wrap;
+        }
+
+        .profile-img {
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            background-color: #e1e7ed;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 5px solid #38b6ff;
+            font-size: 48px;
+            color: #0f2c59;
+        }
+
+        .profile-info h3 {
+            font-size: 24px;
+            color: #1e3a8a;
+            margin-bottom: 10px;
+        }
+
+        .profile-info .title {
+            color: #64748b;
+            font-weight: 600;
+            margin-bottom: 15px;
+        }
+
+        .profile-info ul {
+            list-style-type: none;
+        }
+
+        .profile-info li {
+            margin-bottom: 8px;
+            position: relative;
+            padding-left: 15px;
+        }
+
+        .profile-info li::before {
+            content: "✓";
+            color: #38b6ff;
+            position: absolute;
+            left: 0;
+            font-weight: bold;
+        }
+
+        /* 룰렛 게임 스타일 */
+        .roulette-wrapper {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+        }
+
+        .wheel-container {
+            position: relative;
+            width: 320px;
+            height: 320px;
+            margin-bottom: 25px;
+        }
+
+        /* 룰렛 바늘 */
+        .pointer {
+            position: absolute;
+            top: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 0;
+            height: 0;
+            border-left: 15px solid transparent;
+            border-right: 15px solid transparent;
+            border-top: 30px solid #ff4757;
+            z-index: 10;
+        }
+
+        canvas {
+            border-radius: 50%;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+            transition: transform 4s cubic-bezier(0.1, 0.8, 0.1, 1);
+        }
+
+        .btn {
+            background-color: #0f2c59;
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            font-size: 16px;
+            font-weight: bold;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: background 0.3s;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        .btn:hover {
+            background-color: #1e40af;
+        }
+
+        #result-display {
+            margin-top: 20px;
+            font-size: 20px;
+            font-weight: bold;
+            color: #0f2c59;
+            min-height: 30px;
+        }
+
+        /* 계산기 스타일 */
+        .calc-container {
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #334155;
+        }
+
+        .form-group input, .form-group select {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+
+        .form-group input:focus, .form-group select:focus {
+            outline: none;
+            border-color: #38b6ff;
+        }
+
+        .calc-result {
+            margin-top: 25px;
+            padding: 20px;
+            background-color: #f0f7ff;
+            border-left: 5px solid #38b6ff;
+            border-radius: 4px;
+            display: none;
+        }
+
+        .calc-result h4 {
+            color: #0f2c59;
+            margin-bottom: 10px;
+        }
+
+        .calc-result p {
+            font-size: 22px;
+            font-weight: bold;
+            color: #1e3a8a;
+        }
+
+        /* 푸터 */
+        footer {
+            background-color: #0f2c59;
+            color: #a0aec0;
+            text-align: center;
+            padding: 20px;
+            font-size: 14px;
+            margin-top: 60px;
+        }
+
+        /* 반응형 모바일 스타일 */
+        @media (max-width: 768px) {
+            .profile-container {
+                flex-direction: column;
+                text-align: center;
+            }
+            .profile-info li {
+                text-align: left;
+            }
+            .nav-container {
+                flex-direction: column;
+                gap: 15px;
+            }
+            nav a {
+                margin: 0 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="nav-container">
+            <div class="logo">건설안전<span>Edu</span></div>
+            <nav>
+                <a href="#instructor">강사 소개</a>
+                <a href="#roulette">안전 퀴즈 룰렛</a>
+                <a href="#calculator">안전보건관리비 계산기</a>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        
+        <section id="instructor">
+            <h2>강사 소개</h2>
+            <div class="profile-container">
+                <div class="profile-img">👷‍♂️</div>
+                <div class="profile-info">
+                    <h3>홍길동 <span style="font-size: 16px; font-weight: normal;">교수/기술사</span></h3>
+                    <p class="title">현) 대한건설안전연구원 수석연구원</p>
+                    <ul>
+                        <li>건설안전기술사 / 산업안전지도사</li>
+                        <li>前 OO건설 안전보건관리 책임자 (15년 경력)</li>
+                        <li>고용노동부 지정 건설재해예방 전문기관 평가위원</li>
+                        <li>주요 과목: 건설공학 안전, 가설구조물 재해예방, 중대재해처벌법 대응</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <section id="roulette">
+            <h2>안전 퀴즈 룰렛</h2>
+            <p style="margin-bottom: 20px; color: #64748b;">룰렛을 돌려 오늘 함께 학습할 안전 보건 주제(또는 당첨자 발표)를 선정해보세요!</p>
+            <div class="roulette-wrapper">
+                <div class="pointer"></div>
+                <canvas id="wheelCanvas" width="320" height="320"></canvas>
+                <button class="btn" id="spinBtn" onclick="spinWheel()">룰렛 돌리기</button>
+                <div id="result-display"></div>
+            </div>
+        </section>
+
+        <section id="calculator">
+            <h2>안전보건관리비 계산기</h2>
+            <p style="margin-bottom: 20px; color: #64748b;">공사종류와 대상액을 입력하여 법정 **산업안전보건관리비**의 대략적인 기준을 계산합니다.</p>
+            
+            <div class="calc-container">
+                <div class="form-group">
+                    <label for="conType">공사 종류</label>
+                    <select id="conType">
+                        <option value="general_a">일반공사(갑) - 건축공사, 도로 등</option>
+                        <option value="general_b">일반공사(을)</option>
+                        <option value="heavy">중건설공사 - 댐, 터널 등</option>
+                        <option value="railway">철도·궤도신설공사</option>
+                        <option value="special">특수건설공사</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="amount">대상액 (직접노무비 + 재료비) - 단위: 원</label>
+                    <input type="number" id="amount" placeholder="예: 500000000" min="0">
+                </div>
+                <button class="btn" onclick="calculateSafetyCost()">계산하기</button>
+
+                <div class="calc-result" id="calcResult">
+                    <h4>계산 결과</h4>
+                    <p id="resultValue">0 원</p>
+                    <span style="font-size: 12px; color: #64748b; display:block; margin-top:5px;">* 고용노동부 고시 기준에 따른 단순 참고용 계산입니다. 구체적인 요율 조건에 따라 달라질 수 있습니다.</span>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <footer>
+        <p>&copy; 2026 건설안전 Edu Center. All Rights Reserved.</p>
+    </footer>
+
+    <script>
+        // --- 룰렛 게임 로직 ---
+        const canvas = document.getElementById('wheelCanvas');
+        const ctx = canvas.getContext('2d');
+        const items = ["추락 재해", "낙하·비래", "붕괴·도괴", "협착·끼임", "감전 재해", "화재·폭발"];
+        const colors = ["#0f2c59", "#1e40af", "#3b82f6", "#60a5fa", "#93c5fd", "#bfdbfe"];
+        
+        const numSegments = items.length;
+        const segmentAngle = 2 * Math.PI / numSegments;
+        let currentRotation = 0;
+        let isSpinning = false;
+
+        // 룰렛 판 그리기
+        function drawWheel() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            const radius = canvas.width / 2;
+            ctx.textAlign = "center";
+            ctx.textBaseline = "middle";
+            ctx.font = "bold 14px sans-serif";
+
+            for (let i = 0; i < numSegments; i++) {
+                const angle = i * segmentAngle;
+                
+                // 부채꼴 그리기
+                ctx.beginPath();
+                ctx.fillStyle = colors[i];
+                ctx.moveTo(radius, radius);
+                ctx.arc(radius, radius, radius, angle, angle + segmentAngle);
+                ctx.closePath();
+                ctx.fill();
+
+                // 텍스트 그리기
+                ctx.save();
+                ctx.translate(radius, radius);
+                ctx.rotate(angle + segmentAngle / 2);
+                ctx.fillStyle = (i < 3) ? "#ffffff" : "#0f2c59"; // 배경색 명도에 맞춰 글자색 변경
+                ctx.fillText(items[i], radius * 0.65, 0);
+                ctx.restore();
+            }
+        }
+
+        // 룰렛 돌리기 함수
+        function spinWheel() {
+            if (isSpinning) return;
+            isSpinning = true;
+            document.getElementById('result-display').textContent = "고르는 중...";
+
+            // 무작위 회전 각도 설정 (최소 5바퀴 + 알파)
+            const spinAngle = (Math.random() * 360) + 1800; 
+            currentRotation += spinAngle;
+            
+            // CSS Transform을 이용하여 부드럽게 회전 연출
+            canvas.style.transform = `rotate(${currentRotation}deg)`;
+
+            // 애니메이션 종료(4초) 후 결과 계산
+            setTimeout(() => {
+                isSpinning = false;
+                
+                // 현재 바늘 위치(상단 -90도 방향)에 도달한 세그먼트 인덱스 계산
+                const actualDegrees = currentRotation % 360;
+                // Canvas 회전축과 포인터 상대각 조율 계산식
+                const winningIndex = Math.floor((360 - (actualDegrees - 90)) % 360 / (360 / numSegments));
+                
+                document.getElementById('result-display').textContent = `🎯 선택된 주제: [${items[winningIndex]}]`;
+            }, 4000);
+        }
+
+        // 초기화 시 룰렛 그리기
+        drawWheel();
+
+
+        // --- 안전보건관리비 계산기 로직 ---
+        function calculateSafetyCost() {
+            const type = document.getElementById('conType').value;
+            const amount = parseFloat(document.getElementById('amount').value);
+            const resultDiv = document.getElementById('calcResult');
+            const resultValue = document.getElementById('resultValue');
+
+            if (isNaN(amount) || amount <= 0) {
+                alert("올바른 금액을 입력해 주세요.");
+                return;
+            }
+
+            let rate = 0;
+            let basic = 0;
+
+            // 단순 예시 요율 테이블 정의 (5억 이상 ~ 50억 미만 일반적인 통상 요율 기준 예시)
+            switch(type) {
+                case "general_a": rate = 0.0186; break; // 일반공사갑 요율 예시
+                case "general_b": rate = 0.0199; break;
+                case "heavy": rate = 0.0235; break;
+                case "railway": rate = 0.0157; break;
+                case "special": rate = 0.0114; break;
+                default: rate = 0.0186;
+            }
+
+            // 안전보건관리비 계산 (대상액 * 요율)
+            let totalCost = Math.floor(amount * rate);
+
+            // 결과 표기 포맷 변경
+            resultValue.textContent = totalCost.toLocaleString('ko-KR') + " 원";
+            resultDiv.style.display = "block";
+        }
+    </script>
+</body>
+</html>
